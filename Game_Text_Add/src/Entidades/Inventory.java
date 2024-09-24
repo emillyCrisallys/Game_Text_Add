@@ -1,39 +1,29 @@
+
+
 package Entidades;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Inventory {
-    private Player_Save player_Id;
-    private Cena_Items item_ID;
+    private List<SceneItem> items;
 
-    public Inventory (){
-
+    public Inventory() {
+        items = new ArrayList<>();
     }
 
-    public Inventory(Player_Save player_Id, Cena_Items item_ID) {
-        this.player_Id = player_Id;
-        this.item_ID = item_ID;
+    public void addItem(SceneItem item) {
+        items.add(item);
     }
 
-    public Player_Save getPlayer_Id() {
-        return player_Id;
-    }
-
-    public void setPlayer_Id(Player_Save player_Id) {
-        this.player_Id = player_Id;
-    }
-
-    public Cena_Items getItem_ID() {
-        return item_ID;
-    }
-
-    public void setItem_ID(Cena_Items item_ID) {
-        this.item_ID = item_ID;
-    }
-
-    @Override
-    public String toString() {
-        return "Inventory{" +
-                "player_Id=" + player_Id +
-                ", item_ID=" + item_ID +
-                '}';
+    public void displayItems() {
+        if (items.isEmpty()) {
+            System.out.println("Você não tem itens no inventário.");
+        } else {
+            System.out.println("Itens no inventário:");
+            for (SceneItem item : items) {
+                System.out.println("- " + item);
+            }
+        }
     }
 }
