@@ -7,13 +7,17 @@ public class SceneItem {
     private String item_description;
     private boolean is_collectible;
     private int item_scene_id;
+    private String efeito_uso;
+    private String mensagem_uso;
 
-    public SceneItem(int itemId, String itemName, String itemDescription, boolean isCollectible, int itemSceneId) {
-        this.item_Id = itemId;
-        this.item_Name = itemName;
-        this.item_description = itemDescription;
-        this.is_collectible = isCollectible;
-        this.item_scene_id = itemSceneId;
+    public SceneItem(int item_Id, String item_Name, String item_description, boolean is_collectible, int item_scene_id, String efeito_uso, String mensagem_uso) {
+        this.item_Id = item_Id;
+        this.item_Name = item_Name;
+        this.item_description = item_description;
+        this.is_collectible = is_collectible;
+        this.item_scene_id = item_scene_id;
+        this.efeito_uso = efeito_uso;
+        this.mensagem_uso = mensagem_uso;
     }
 
     public int getItem_Id() {
@@ -36,9 +40,24 @@ public class SceneItem {
         return item_scene_id;
     }
 
-    @Override
-    public String toString() {
-        return item_Name + ": " + item_description + (is_collectible ? " (Coletável)" : "") + " [Cena ID: " + item_scene_id + "]";
+    public String getEfeito_uso() {
+        return efeito_uso;
     }
 
+    public String getMensagem_uso() {
+        return mensagem_uso;
+    }
+
+    @Override
+    public String toString() {
+        return "SceneItem{" +
+                "item_Id=" + item_Id +
+                ", item_Name='" + item_Name + '\'' +
+                ", item_description='" + item_description + '\'' +
+                ", is_collectible=" + is_collectible +
+                ", item_scene_id=" + item_scene_id +
+                ", efeito_uso='" + efeito_uso + '\'' +
+                ", mensagem_uso='" + mensagem_uso + '\'' +
+                '}';
+    }
 }

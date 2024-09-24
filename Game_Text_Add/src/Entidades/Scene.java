@@ -5,10 +5,13 @@ public class Scene {
     private String scene_name;
     private String scene_description;
 
-    public Scene(int id_scenes, String name, String description) {
+
+
+    public Scene(int id_scenes, String scene_name, String scene_description) {
         this.id_scenes = id_scenes;
-        this.scene_name = name;
-        this.scene_description = description;
+        this.scene_name = scene_name;
+        this.scene_description = scene_description;
+
     }
 
     public int getId_scenes() {
@@ -23,8 +26,17 @@ public class Scene {
         return scene_description;
     }
 
+    public String getScene_name() {
+        return scene_name;
+    }
+
+
     @Override
     public String toString() {
-        return "Cena: " + scene_name + "\n" + scene_description;
+        return "Scene{" +
+                "id_scenes=" + id_scenes +
+                ", scene_name='" + scene_name + '\'' +
+                ", scene_description='" + scene_description + '\'' +
+                '}';
     }
 }
