@@ -23,6 +23,9 @@ public class TextAdventureGame {
 
     public void initializeGame() {
         System.out.println("Bem-vindo ao Mundo Secreto de Coraline!");
+        System.out.println("Você é Coraline, uma jovem curiosa e aventureira que acabou de se mudar para uma nova casa com sua família. " +
+                "Você estava explorando a velha mansão e tropeçou em uma porta misteriosa escondida atrás de um papel de parede. " +
+                "A porta está trancada, mas você sente que há algo estranho e maravilhoso do outro lado.");
         // Aqui você pode adicionar lógica para carregar o jogador ou criar um novo.
         playerSave = loadPlayerSave(1); // Carrega o jogador (ou cria novo)
         if (playerSave != null) {
@@ -40,32 +43,47 @@ public class TextAdventureGame {
         while (true) {
             System.out.print("> ");
             command = scanner.nextLine().trim().toUpperCase();
-            switch (command) {
-                case "HELP":
-                    showHelp();
-                    break;
-                case "GET":
-                    getItem();
-                    break;
-                case "USE":
-                    useItem();
-                    break;
-                case "SAVE":
-                    saveGame();
-                    break;
-                case "LOAD":
-                    loadGame();
-                    break;
-                case "RESTART":
-                    restartGame();
-                    break;
-                case "EXIT":
-                    closeConnection();
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Comando não reconhecido. Digite HELP para ajuda.");
-                    break;
+
+            if (command.startsWith("CHECK ")) {
+                // Extrai o nome do item do comando
+                String itemName = command.substring(6).trim();
+                if (!itemName.isEmpty()) {
+                    checkSceneItem(itemName);
+                } else {
+                    System.out.println("Especifique o nome de um item para verificar.");
+                }
+            } else {
+                switch (command) {
+
+                    case "HELP":
+                        showHelp();
+                        break;
+                    case "GET":
+                        getItem();
+                        break;
+                    case "USE":
+                        useItem();
+                        break;
+                    case "SAVE":
+                        saveGame();
+                        break;
+                    case "LOAD":
+                        loadGame();
+                        break;
+                    case "RESTART":
+                        restartGame();
+                        break;
+                    case "CHECK INVENTORY": // Novo comando para checar o inventário
+                        checkInventory();
+                        break;
+                    case "EXIT":
+                        closeConnection();
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Comando não reconhecido. Digite HELP para ajuda.");
+                        break;
+                }
             }
         }
     }
@@ -75,11 +93,16 @@ public class TextAdventureGame {
         System.out.println("HELP - Mostra esta ajuda.");
         System.out.println("GET [ITEM] - Coleta um item da cena.");
         System.out.println("USE [ITEM] - Usa um item do inventário.");
+        System.out.println("CHECK INVENTORY - Checar a descrição dos itens do inventário");
+        System.out.println("CHECK ITEM - Checar a descrição dos itens da cena");
         System.out.println("SAVE - Salva o jogo.");
         System.out.println("LOAD - Carrega o jogo salvo.");
         System.out.println("RESTART - Reinicia o jogo.");
         System.out.println("EXIT - Sair do jogo.");
     }
+
+
+
 
     // Implementação do comando GET
     private void getItem() {
@@ -200,12 +223,61 @@ public class TextAdventureGame {
         }
     }
 
+    private void checkInventory() {
+        System.out.println("Seu inventário contém os seguintes itens:");
 
+        try {
+            String query = "SELECT item_name, item_description FROM inventory WHERE player_id = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, playerSave.getPlayerId());
+            ResultSet rs = stmt.executeQuery();
+
+            boolean hasItems = false;
+            while (rs.next()) {
+                hasItems = true;
+                String itemName = rs.getString("item_name");
+                String itemDescription = rs.getString("item_description");
+                System.out.println(itemName + ": " + itemDescription);
+            }
+
+            if (!hasItems) {
+                System.out.println("Seu inventário está vazio.");
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void checkSceneItem(String itemName) {
+        try {
+            // Consulta para verificar a descrição do item na cena atual
+            String query = "SELECT item_description FROM Scene_Items WHERE item_scene_id = ? AND item_name = ?";
+            PreparedStatement stmt = connection.prepareStatement(query);
+            stmt.setInt(1, playerSave.getCurrentSceneId());  // Obtém o ID da cena atual
+            stmt.setString(2, itemName);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String itemDescription = rs.getString("item_description");
+                System.out.println(itemName + ": " + itemDescription);
+            } else {
+                System.out.println("Este item não está presente na cena.");
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Scene loadScene(int sceneId) {
         Scene scene = null;
         try {
-            String query = "SELECT * FROM Scenes WHERE scene_id = ?";
+            String query = "SELECT * FROM Scenes WHERE id_scenes = ?";
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setInt(1, sceneId);
             ResultSet rs = stmt.executeQuery();

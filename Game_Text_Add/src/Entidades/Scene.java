@@ -33,10 +33,6 @@ public class Scene {
 
     @Override
     public String toString() {
-        return "Scene{" +
-                "id_scenes=" + id_scenes +
-                ", scene_name='" + scene_name + '\'' +
-                ", scene_description='" + scene_description + '\'' +
-                '}';
+        return scene_name + "\n" + scene_description;
     }
 }

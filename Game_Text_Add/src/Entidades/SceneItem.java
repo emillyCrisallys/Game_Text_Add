@@ -48,16 +48,5 @@ public class SceneItem {
         return mensagem_uso;
     }
 
-    @Override
-    public String toString() {
-        return "SceneItem{" +
-                "item_Id=" + item_Id +
-                ", item_Name='" + item_Name + '\'' +
-                ", item_description='" + item_description + '\'' +
-                ", is_collectible=" + is_collectible +
-                ", item_scene_id=" + item_scene_id +
-                ", efeito_uso='" + efeito_uso + '\'' +
-                ", mensagem_uso='" + mensagem_uso + '\'' +
-                '}';
-    }
+
 }

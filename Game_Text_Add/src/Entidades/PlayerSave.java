@@ -21,8 +21,5 @@ public class PlayerSave {
         this.currentSceneId = currentSceneId;
     }
 
-    @Override
-    public String toString() {
-        return "Jogador ID: " + playerId + ", Cena Atual: " + currentSceneId;
-    }
+
 }
